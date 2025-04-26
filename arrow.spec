@@ -1,10 +1,10 @@
-%define major 1801
+%define major 2000
 %define libname %mklibname arrow
 %define devname %mklibname arrow -d
 %define staticname %mklibname arrow -d -s
 
 Name:		arrow
-Version:	18.1.0
+Version:	20.0.0
 Release:	1
 Source0:	https://github.com/apache/arrow/releases/download/apache-arrow-%{version}/apache-arrow-%{version}.tar.gz
 Summary:	Columnar format and multi-language toolbox for fast data interchange and in-memory analytic
