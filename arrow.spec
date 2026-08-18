@@ -38,9 +38,9 @@ BuildRequires:	pkgconfig(thrift)
 # cmake itself Provides: cmake(Boost) with no version; the headers
 # live in lib64boost-core-devel as cmake(boost_headers).
 BuildRequires:	cmake(boost_headers)
-# Thrift's TTransportException.h includes boost/numeric/conversion/cast.hpp
-# (not part of boost_headers / lib64boost-core-devel).
-BuildRequires:	boost-numeric-devel
+# Thrift headers pull a tree of Boost components (numeric, detail,
+# ...). The umbrella package is the only reliable way to get them.
+BuildRequires:	boost-devel
 BuildRequires:	pkgconfig(python)
 BuildRequires:	python
 BuildRequires:	python%{pyver}dist(pip)
