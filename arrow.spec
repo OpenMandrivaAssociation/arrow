@@ -37,7 +37,9 @@ BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(RapidJSON)
 BuildRequires:	pkgconfig(thrift)
-BuildRequires:	cmake(Boost)
+# cmake itself Provides: cmake(Boost) with no version; the headers
+# live in lib64boost-core-devel as cmake(boost_headers).
+BuildRequires:	cmake(boost_headers)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	python
 BuildRequires:	python%{pyver}dist(pip)
