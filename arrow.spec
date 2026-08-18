@@ -17,8 +17,11 @@ Source0:	https://github.com/apache/arrow/releases/download/apache-arrow-%{versio
 %global _lto_cflags %{nil}
 # Arrow's installed CMake configs call find_dependency() on vendored
 # Find*Alt modules; those generate cmake(Thrift)/cmake(BrotliAlt)/...
-# requires that no OpenMandriva package Provides.
-%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^cmake\\(
+# requires that no OpenMandriva package Provides. Match inside rich
+# deps too — "(cmake(thrift) or cmake(Thrift))" does not start with cmake(.
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}cmake\\(
+# Do not extract Requires from the installed Config.cmake files at all.
+%global __requires_exclude_from %{?__requires_exclude_from:%{__requires_exclude_from}|}^%{_libdir}/cmake/
 
 BuildRequires:	cmake
 BuildRequires:	ninja
