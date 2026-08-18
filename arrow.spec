@@ -15,8 +15,6 @@ Source0:	https://github.com/apache/arrow/releases/download/apache-arrow-%{versio
 
 # Prefer clang; LTO of Arrow + PyArrow is not worth the link RAM.
 %global _lto_cflags %{nil}
-# Leave cores for the concurrent python-torch HIP build.
-%global _smp_ncpus_max 8
 # Arrow's installed CMake configs call find_dependency() on vendored
 # Find*Alt modules; those generate cmake(Thrift)/cmake(BrotliAlt)/...
 # requires that no OpenMandriva package Provides.
@@ -40,6 +38,9 @@ BuildRequires:	pkgconfig(thrift)
 # cmake itself Provides: cmake(Boost) with no version; the headers
 # live in lib64boost-core-devel as cmake(boost_headers).
 BuildRequires:	cmake(boost_headers)
+# Thrift's TTransportException.h includes boost/numeric/conversion/cast.hpp
+# (not part of boost_headers / lib64boost-core-devel).
+BuildRequires:	boost-numeric-devel
 BuildRequires:	pkgconfig(python)
 BuildRequires:	python
 BuildRequires:	python%{pyver}dist(pip)
@@ -139,8 +140,7 @@ cd cpp
 %build
 export CC=clang
 export CXX=clang++
-# Do not steal every core from the concurrent python-torch HIP build.
-/usr/bin/ninja -C cpp/build -j%{_smp_ncpus_max}
+/usr/bin/ninja -C cpp/build %{?_smp_mflags}
 
 %install
 export CC=clang
@@ -157,8 +157,8 @@ export PYARROW_WITH_DATASET=1
 export PYARROW_WITH_ACERO=1
 export PYARROW_BUNDLE_ARROW_CPP=0
 export PYARROW_BUILD_TYPE=Release
-export PYARROW_PARALLEL=%{_smp_ncpus_max}
-export CMAKE_BUILD_PARALLEL_LEVEL=%{_smp_ncpus_max}
+export PYARROW_PARALLEL=%{_smp_build_ncpus}
+export CMAKE_BUILD_PARALLEL_LEVEL=%{_smp_build_ncpus}
 cd python
 mkdir -p ../RPMBUILD_wheels
 pip wheel --wheel-dir ../RPMBUILD_wheels --no-deps --no-build-isolation --verbose .
