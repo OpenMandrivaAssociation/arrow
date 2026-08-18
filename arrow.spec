@@ -17,6 +17,10 @@ Source0:	https://github.com/apache/arrow/releases/download/apache-arrow-%{versio
 %global _lto_cflags %{nil}
 # Leave cores for the concurrent python-torch HIP build.
 %global _smp_ncpus_max 8
+# Arrow's installed CMake configs call find_dependency() on vendored
+# Find*Alt modules; those generate cmake(Thrift)/cmake(BrotliAlt)/...
+# requires that no OpenMandriva package Provides.
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^cmake\\(
 
 BuildRequires:	cmake
 BuildRequires:	ninja
@@ -61,6 +65,13 @@ Shared Arrow, Acero, Dataset and Parquet libraries.
 Summary:	Development files for %{name}
 Group:		Development/C
 Requires:	%{libname}%{?_isa} = %{EVRD}
+Requires:	pkgconfig(thrift)
+Requires:	pkgconfig(snappy)
+Requires:	pkgconfig(liblz4)
+Requires:	pkgconfig(libzstd)
+Requires:	pkgconfig(libbrotlidec)
+Requires:	pkgconfig(re2)
+Requires:	pkgconfig(libutf8proc)
 Provides:	%{name}-devel = %{EVRD}
 
 %description -n %{devname}
