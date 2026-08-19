@@ -6,7 +6,7 @@
 
 Name:		arrow
 Version:	25.0.1
-Release:	1
+Release:	2
 Summary:	Columnar in-memory format and multi-language toolbox
 License:	Apache-2.0
 Group:		System/Libraries
